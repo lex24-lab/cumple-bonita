@@ -1,21 +1,32 @@
 * {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
 body {
   background: black;
   font-family: Arial, sans-serif;
+  overflow: hidden;
+   -webkit-user-select: none;
+  user-select: none;
 }
 
+/* 🎨 Canvas */
 canvas {
   position: fixed;
   top: 0;
   left: 0;
 }
 
-#badtz, #kuromi {
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+/* 🐧 Personajes */
+#badtz,
+#kuromi {
   position: absolute;
   bottom: 60px;
   width: 120px;
@@ -32,6 +43,7 @@ canvas {
   transform: translateX(-50%);
 }
 
+/* 💬 UI */
 #ui {
   position: fixed;
   width: 100%;
@@ -42,7 +54,7 @@ canvas {
 
 #hint {
   color: #7df9ff;
-  font-size: 28px;
+  font-size: 1.6rem;
   margin-top: 100px;
   opacity: 0;
   text-shadow: 0 0 12px #7df9ff;
@@ -50,8 +62,55 @@ canvas {
 
 #message {
   color: #fff;
-  font-size: 36px;
+  font-size: 2rem;
   margin-top: 40px;
   opacity: 0;
+  padding: 0 20px;
   text-shadow: 0 0 20px #ff66ff;
+}
+
+/* 🖱️ Pantalla de inicio */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.startText {
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+  animation: pulse 1.5s infinite;
+}
+
+/* ✨ Animación */
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* 📱 Ajustes para móvil */
+@media (max-width: 600px) {
+  #badtz,
+  #kuromi {
+    width: 90px;
+    bottom: 40px;
+  }
+
+  #hint {
+    font-size: 1.2rem;
+  }
+
+  #message {
+    font-size: 1.4rem;
+  }
+
+  .startText {
+    font-size: 1.5rem;
+  }
 }
