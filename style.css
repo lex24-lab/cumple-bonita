@@ -114,3 +114,32 @@ html, body {
     font-size: 1.5rem;
   }
 }
+
+/* 🔒 BLOQUEO EN MODO VERTICAL (CELULAR) */
+#rotateBlock {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  text-align: center;
+}
+
+#rotateBlock p {
+  font-size: 1.5rem;
+  animation: pulse 1.5s infinite;
+}
+
+/* 📱 SI ES CELULAR Y ESTÁ EN VERTICAL → BLOQUEAR */
+@media (max-width: 900px) and (orientation: portrait) {
+  #rotateBlock {
+    display: flex;
+  }
+
+  body {
+    overflow: hidden;
+  }
+}
