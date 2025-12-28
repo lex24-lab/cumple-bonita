@@ -1,24 +1,37 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+
+// 🔄 Canvas responsive (clave para móvil)
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
 const badtz = document.getElementById("badtz");
 const kuromi = document.getElementById("kuromi");
 const hint = document.getElementById("hint");
 const message = document.getElementById("message");
 const pianoIntro = document.getElementById("pianoIntro");
+const startScreen = document.getElementById("startScreen");
+
+// 🎵 Piano
+pianoIntro.volume = 0.35;
+pianoIntro.loop = false;
+
+// Pausa / reanuda si se cambia de pestaña
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     pianoIntro.pause();
   } else {
-    // si NO ha terminado, continúa
     if (pianoIntro.currentTime > 0 && !pianoIntro.ended) {
       pianoIntro.play().catch(() => {});
     }
   }
 });
 
+// 🚶 Sprites de Badtz
 const walkFrames = [
   "img/badtz_walk1.png",
   "img/badtz_walk2.png",
@@ -27,13 +40,14 @@ const walkFrames = [
 
 let frame = 0;
 let fireworks = [];
-let started = false;
-let canClick = false;
+let startedFireworks = false;
+let canClickBadtz = false;
 let lastSpriteTime = 0;
-const spriteInterval = 250; // más lento para caminar natural
+let introStarted = false;
+const spriteInterval = 260;
 
 // ⭐ Estrellas
-const stars = Array.from({ length: 150 }, () => ({
+const stars = Array.from({ length: 160 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
   r: Math.random() * 1.5 + 0.5
@@ -48,9 +62,9 @@ function drawStars() {
   });
 }
 
-// 🚶 Badtz camina
+// 🚶‍♂️ Caminata de Badtz
 let x = -150;
-const targetX = canvas.width / 2 - 160;
+const targetX = canvas.width / 2 - 180;
 
 function walk(time) {
   if (x < targetX) {
@@ -66,11 +80,9 @@ function walk(time) {
   } else {
     badtz.src = walkFrames[0];
     hint.style.opacity = 1;
-    canClick = true;
+    canClickBadtz = true;
   }
 }
-
-requestAnimationFrame(walk);
 
 // 🎇 Fuegos artificiales
 class Firework {
@@ -82,7 +94,7 @@ class Firework {
     this.exploded = false;
     this.particles = [];
     this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-    this.pattern = Math.random() < 0.3 ? "circle" : "normal"; // algunos patrones
+    this.pattern = Math.random() < 0.35 ? "circle" : "normal";
   }
 
   update() {
@@ -107,14 +119,17 @@ class Firework {
 
   explode() {
     this.exploded = true;
+
     for (let i = 0; i < 80; i++) {
-      this.particles.push(new Particle(this.x, this.y, this.color, this.pattern, i));
+      this.particles.push(
+        new Particle(this.x, this.y, this.color, this.pattern, i)
+      );
     }
 
-    // sonido por cada explosión usando clones para que se reproduzca completo
-    const sound = new Audio("sounds/fireworks.mp3");
-    sound.volume = 0.7;
-    sound.play();
+    // 🔊 sonido por explosión (completo, no cortado)
+    const boom = new Audio("sounds/fireworks.mp3");
+    boom.volume = 0.6;
+    boom.play().catch(() => {});
   }
 }
 
@@ -125,7 +140,10 @@ class Particle {
     this.life = 60;
     this.color = color;
     this.speed = Math.random() * 6 + 2;
-    this.angle = pattern === "circle" ? (index * (Math.PI * 2 / 80)) : Math.random() * Math.PI * 2;
+    this.angle =
+      pattern === "circle"
+        ? index * (Math.PI * 2 / 80)
+        : Math.random() * Math.PI * 2;
   }
 
   update() {
@@ -144,26 +162,40 @@ class Particle {
   }
 }
 
-// Activación
-badtz.addEventListener("click", () => {
-  if (!canClick || started) return;
+// 🖱️ Pantalla de inicio
+startScreen.addEventListener("click", () => {
+  if (introStarted) return;
+  introStarted = true;
 
-  started = true;
+  startScreen.style.display = "none";
+
+  pianoIntro.currentTime = 0;
+  pianoIntro.play().catch(() => {});
+
+  requestAnimationFrame(walk);
+});
+
+// 🖱️ Click en Badtz → fuegos
+badtz.addEventListener("click", () => {
+  if (!canClickBadtz || startedFireworks) return;
+
+  startedFireworks = true;
   hint.style.opacity = 0;
   message.style.opacity = 1;
 
-  // Cambiar Kuromi a Feliz
   kuromi.src = "img/kuromi_happy.png";
 
-  // varios fuegos artificiales a la vez
+  // 💥 Límite para no trabar móviles
   setInterval(() => {
-    for (let i = 0; i < 3; i++) {
-      fireworks.push(new Firework());
+    if (fireworks.length < 25) {
+      for (let i = 0; i < 3; i++) {
+        fireworks.push(new Firework());
+      }
     }
-  }, 600);
+  }, 650);
 });
 
-// Loop principal
+// 🎬 Loop principal
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawStars();
@@ -178,10 +210,5 @@ function animate() {
 
   requestAnimationFrame(animate);
 }
-
-window.addEventListener("load", () => {
-  pianoIntro.volume = 0.35;
-  pianoIntro.play().catch(() => {});
-});
 
 animate();
