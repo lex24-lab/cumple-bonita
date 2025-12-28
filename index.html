@@ -3,22 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>Feliz Cumpleaños ✨</title>
+
+  <!-- Viewport correcto para móvil -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<canvas id="canvas"></canvas>
-
-<div id="ui">
-  <div id="hint">Toca a Badtz-Maru</div>
-  <div id="message">✨ Feliz cumpleaños 18, Bonita ✨<br>Disfruta tu día 🎂🎉💐🩷</div>
+<!-- 🖱️ Pantalla negra de inicio -->
+<div id="startScreen">
+  <div class="startText">Toca para comenzar ✨</div>
 </div>
 
-<audio id="pianoIntro" src="sounds/piano_intro.mp3"></audio>
+<!-- 🎨 Fondo -->
+<canvas id="canvas"></canvas>
 
-<img id="badtz" src="img/badtz_walk1.png">
-<img id="kuromi" src="img/kuromi_normal.png">
+<!-- 💬 UI -->
+<div id="ui">
+  <div id="hint">Toca a Badtz-Maru</div>
+  <div id="message">
+    ✨ Feliz cumpleaños 18, Bonita ✨<br>
+    Disfruta tu día 🎂🎉💐🩷
+  </div>
+</div>
 
-<script src="script.js"></script>
+<!-- 🎵 Música -->
+<audio
+  id="pianoIntro"
+  src="sounds/piano_intro.mp3"
+  preload="auto"
+  playsinline
+  webkit-playsinline
+></audio>
+
+<!-- 🐧 Personajes -->
+<img id="badtz" src="img/badtz_walk1.png" alt="Badtz-Maru">
+<img id="kuromi" src="img/kuromi_normal.png" alt="Kuromi">
+
+<!-- ⚙️ Script -->
+<script src="script.js" defer></script>
+
 </body>
 </html>
