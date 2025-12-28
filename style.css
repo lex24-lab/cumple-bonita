@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  background: black;
+  font-family: Arial, sans-serif;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+#badtz, #kuromi {
+  position: absolute;
+  bottom: 60px;
+  width: 120px;
+  z-index: 5;
+}
+
+#badtz {
+  left: -150px;
+  cursor: pointer;
+}
+
+#kuromi {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#ui {
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#hint {
+  color: #7df9ff;
+  font-size: 28px;
+  margin-top: 100px;
+  opacity: 0;
+  text-shadow: 0 0 12px #7df9ff;
+}
+
+#message {
+  color: #fff;
+  font-size: 36px;
+  margin-top: 40px;
+  opacity: 0;
+  text-shadow: 0 0 20px #ff66ff;
+}
